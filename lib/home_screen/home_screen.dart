@@ -12,6 +12,8 @@ class Home_Screen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     NewsViewModel newsViewModel = NewsViewModel();
+    double height = screenHeight(context);
+    double width = screenWidth(context);
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -54,24 +56,70 @@ class Home_Screen extends StatelessWidget {
                               child: Stack(
                                 alignment: Alignment.center,
                                 children: [
-                                  SizedBox(
+                                  Container(
                                     height: screenHeight(context) * 0.6,
                                     width: screenWidth(context) * 0.9,
-                                    child: CachedNetworkImage(
-                                        imageUrl: snapshot
-                                            .data!.articles![index].urlToImage
-                                            .toString(),
-                                        fit: BoxFit.cover,
-                                        placeholder: (context, url) =>
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal:
+                                            screenHeight(context) * 0.02),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(15),
+                                      child: CachedNetworkImage(
+                                          imageUrl: snapshot
+                                              .data!.articles![index].urlToImage
+                                              .toString(),
+                                          fit: BoxFit.cover,
+                                          placeholder: (context, url) =>
+                                              Container(
+                                                child: spinKit2,
+                                              ),
+                                          errorWidget: (context, url, error) =>
+                                              const Icon(
+                                                Icons.error_outline,
+                                                color: Colors.red,
+                                              )),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    bottom: 20,
+                                    child: Card(
+                                      elevation: 5,
+                                      color: Colors.white,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(12)),
+                                      child: Container(
+                                        height: screenHeight(context) * 0.22,
+                                        alignment: Alignment.bottomCenter,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
                                             Container(
-                                              child: spinKit2,
+                                              width: screenWidth(context) * 0.7,
+                                              child: Text(
+                                                snapshot.data!.articles![index]
+                                                    .title
+                                                    .toString(),
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: GoogleFonts.poppins(
+                                                    fontSize: 17,
+                                                    fontWeight:
+                                                        FontWeight.w700),
+                                              ),
                                             ),
-                                        errorWidget: (context, url, error) =>
-                                            const Icon(
-                                              Icons.error_outline,
-                                              color: Colors.red,
-                                            )),
-                                  )
+                                            const Spacer(),
+                                            Container(
+                                              width: screenWidth(context) * 0.7,
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                 ],
                               ),
                             );
