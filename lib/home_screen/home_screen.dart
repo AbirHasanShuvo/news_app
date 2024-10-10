@@ -7,15 +7,25 @@ import 'package:news_app/const.dart';
 import 'package:news_app/models/news_channel_headlines_model.dart';
 import 'package:news_app/view_model/news_view_model.dart';
 
-class Home_Screen extends StatelessWidget {
+enum FilterList { bbcNews, aryNews, independent, reuters, cnn, aljazeera }
+
+class Home_Screen extends StatefulWidget {
   const Home_Screen({super.key});
 
+  @override
+  State<Home_Screen> createState() => _Home_ScreenState();
+}
+
+class _Home_ScreenState extends State<Home_Screen> {
   @override
   Widget build(BuildContext context) {
     NewsViewModel newsViewModel = NewsViewModel();
     double height = screenHeight(context);
     double width = screenWidth(context);
     final format = DateFormat('MMM dd, yyyy');
+
+    FilterList? selectMenuItem;
+    String name = 'bbc-news';
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -25,6 +35,7 @@ class Home_Screen extends StatelessWidget {
             style:
                 GoogleFonts.poppins(fontSize: 24, fontWeight: FontWeight.w700),
           ),
+
           leading: IconButton(
               onPressed: () {},
               icon: Image.asset(
@@ -32,6 +43,62 @@ class Home_Screen extends StatelessWidget {
                 height: 30,
                 width: 30,
               )),
+          actions: [
+            PopupMenuButton(
+                initialValue: selectMenuItem,
+                onSelected: (FilterList item) {
+                  if (FilterList.bbcNews.name == item.name) {
+                    name = 'bbc-news';
+                  }
+                  if (FilterList.aryNews.name == item.name) {
+                    name = 'ary-news';
+                  }
+                  if (FilterList.independent.name == item.name) {
+                    name = 'independent';
+                  }
+                  if (FilterList.reuters.name == item.name) {
+                    name = 'reuters';
+                  }
+                  if (FilterList.cnn.name == item.name) {
+                    name = 'cnn';
+                  }
+                  if (FilterList.aljazeera.name == item.name) {
+                    name = 'al-jazeera-english';
+                  }
+
+                  // newsViewModel.fetchNewsChannelHeadlineApi();
+                  setState(() {
+                    selectMenuItem = item;
+                  });
+                },
+                itemBuilder: (BuildContext context) =>
+                    <PopupMenuEntry<FilterList>>[
+                      PopupMenuItem(
+                        child: Text('BBC news'),
+                        value: FilterList.bbcNews,
+                      ),
+                      PopupMenuItem(
+                        child: Text('Ary news'),
+                        value: FilterList.aryNews,
+                      ),
+                      PopupMenuItem(
+                        child: Text('INDEPENDENT'),
+                        value: FilterList.independent,
+                      ),
+                      PopupMenuItem(
+                        child: Text('Reuters'),
+                        value: FilterList.reuters,
+                      ),
+                      PopupMenuItem(
+                        child: Text('CNN'),
+                        value: FilterList.cnn,
+                      ),
+                      PopupMenuItem(
+                        child: Text('Aljazeera'),
+                        value: FilterList.aljazeera,
+                      )
+                    ])
+          ],
         ),
         body: ListView(
           children: [
